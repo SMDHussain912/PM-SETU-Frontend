@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
       // absolute API URL is ever baked into the bundle.
       proxy: {
         '/api': {
-          target: env.VITE_PROXY_TARGET || 'http://localhost:3000',
+          target: env.PROXY_TARGET || 'http://localhost:3000',
           changeOrigin: true,
         },
       },
