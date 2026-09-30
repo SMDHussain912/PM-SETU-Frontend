@@ -1,0 +1,10 @@
+/* App-level styles.
+   The previous 656-line sheet defined .navbar, .hero-emblem, .stats,
+   .feature, .how-it-works, .testimonial, .cta, .contact and .footer blocks
+   that no component ever rendered. Those selectors are gone; the real
+   components carry their own co-located CSS:
+     components/layout/*.css   header, nav, footer, shell
+     components/LeaderBanner.css
+     styles/pages.css          page header, async states, forms, 404
+   Section rhythm lives on .page-section (styles/pages.css).
+*/

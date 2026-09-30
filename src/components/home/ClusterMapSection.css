@@ -1,0 +1,35 @@
+.map-placeholder {
+  padding: 2.25rem 1.5rem;
+  text-align: center;
+  background: var(--c-bg);
+  border: 2px dashed var(--c-border);
+  border-radius: var(--radius-lg);
+}
+
+.map-placeholder__badge {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c-amber-text);
+  background: var(--c-amber-soft);
+  border-radius: 999px;
+}
+
+.map-placeholder__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--c-ink);
+}
+
+.map-placeholder__text {
+  margin: 0 auto 1.25rem;
+  max-width: 52ch;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--c-ink-2);
+}

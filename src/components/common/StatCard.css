@@ -1,0 +1,71 @@
+/* AP at a Glance KPI cards (plan §6) */
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.1rem 1rem;
+  text-align: center;
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  box-shadow: var(--c-shadow);
+  transition: transform var(--transition), border-color var(--transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--c-amber-text);
+}
+
+.stat-card--emphasis {
+  background: var(--c-amber-soft);
+  border-color: var(--c-amber-text);
+}
+
+.stat-card__value {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  /* --c-ink, not --c-navy: --c-navy is a SURFACE token and in dark mode it
+     resolves to #030712 on a #0b0c14 card — 1.03:1, effectively invisible.
+     --c-ink flips with the theme, so the figure is always readable. */
+  color: var(--c-ink);
+}
+
+.stat-card--emphasis .stat-card__value {
+  color: var(--c-amber-text);
+}
+
+.stat-card__pending {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+
+.stat-card__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--c-ink);
+}
+
+.stat-card__hint {
+  font-size: 0.72rem;
+  color: var(--c-muted);
+}
+
+@media (max-width: 480px) {
+  .stat-card {
+    padding: 0.9rem 0.6rem;
+  }
+
+  .stat-card__label {
+    font-size: 0.78rem;
+  }
+}

@@ -1,0 +1,98 @@
+/* Utility bar — plan §4 "Utility functions" */
+
+.utility-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  min-height: 34px;
+  padding: 0.25rem 4%;
+  /* Pinned: a pale grey strip above the white identity band. */
+  background: var(--c-gov-band);
+  border-bottom: 1px solid var(--c-gov-border);
+  font-size: 0.75rem;
+  color: var(--c-gov-muted);
+}
+
+.utility-bar__gov {
+  font-weight: 700;
+  color: var(--c-gov-ink);
+}
+
+.utility-bar__right {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.utility-bar__group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.utility-bar__sep {
+  color: var(--c-gov-border);
+}
+
+.utility-bar__btn {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.75rem;
+  min-height: 1.75rem;
+  padding: 0 0.3rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.utility-bar__btn--size {
+  font-weight: 700;
+}
+
+.utility-bar__btn:hover:not(:disabled) {
+  background: var(--c-amber-soft);
+  border-color: var(--c-amber-text);
+  color: var(--c-amber-text);
+}
+
+.utility-bar__btn[aria-pressed='true'] {
+  background: var(--c-gov-blue);
+  border-color: var(--c-gov-blue);
+  color: #fff;
+}
+
+.utility-bar__btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.utility-bar__btn:focus-visible,
+.utility-bar__select:focus-visible {
+  outline: 2px solid var(--c-focus);
+  outline-offset: 2px;
+}
+
+.utility-bar__select {
+  padding: 0.2rem 0.3rem;
+  background: transparent;
+  border: 1px solid var(--c-gov-border);
+  border-radius: 4px;
+  color: var(--c-gov-ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+@media (max-width: 800px) {
+  .utility-bar {
+    justify-content: center;
+    padding: 0.4rem 3%;
+    font-size: 0.7rem;
+  }
+}

@@ -1,0 +1,73 @@
+/* Primary navigation — plan §2 */
+
+/* Government blue, not near-black navy: #063b82 is the standard NIC /
+   Government of India navigation blue. --c-navy (#0b132e) read as a
+   product/industrial palette. Pinned so it never inverts with the theme. */
+.main-nav {
+  background: var(--c-gov-blue);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.main-nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.main-nav__item {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.main-nav__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.5rem 0.55rem;
+  font-size: 0.75rem;
+  line-height: 1.25;
+  text-align: center;
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.main-nav__link:hover {
+  background: var(--c-navy-2);
+  border-bottom-color: var(--c-amber-text);
+}
+
+.main-nav__link:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -4px;
+}
+
+.main-nav__link.is-active {
+  background: var(--c-navy-2);
+  border-bottom-color: var(--c-amber-text);
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .main-nav__item {
+    flex: 1 1 33%;
+  }
+}
+
+@media (max-width: 600px) {
+  .main-nav__item {
+    flex: 1 1 50%;
+  }
+
+  .main-nav__link {
+    min-height: 44px;
+    font-size: 0.72rem;
+  }
+}

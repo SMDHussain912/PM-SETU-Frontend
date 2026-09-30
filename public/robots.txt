@@ -1,0 +1,11 @@
+# PM SETU - Andhra Pradesh
+# Plan §9.3: crawler directives for the official portal.
+
+User-agent: *
+Allow: /
+
+# Administrative/API surface must never be indexed.
+Disallow: /api/
+Disallow: /admin/
+
+Sitemap: /sitemap.xml

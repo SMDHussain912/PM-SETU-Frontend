@@ -1,0 +1,21 @@
+/* App shell */
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+
+.app-main {
+  flex: 1 0 auto;
+}
+
+/* The skip link targets this element; it must not draw a focus ring itself. */
+.app-main:focus {
+  outline: none;
+}
+
+.app-main:focus-visible {
+  outline: 3px solid var(--c-focus);
+  outline-offset: -3px;
+}

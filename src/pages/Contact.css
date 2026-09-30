@@ -1,0 +1,77 @@
+/* Contact page — plan §23 */
+
+.contact {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.contact__address {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  font-style: normal;
+  line-height: 1.7;
+  color: var(--c-ink-2);
+}
+
+.contact__note {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--c-muted);
+}
+
+.contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: 1.5rem;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+}
+
+.contact__form .btn {
+  align-self: flex-start;
+}
+
+.field__error {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #c02626;
+}
+
+.form-error {
+  padding: 0.7rem 0.9rem;
+  font-size: 0.88rem;
+  color: #8a1c1c;
+  background: #fdecec;
+  border: 1px solid #f0b4b4;
+  border-radius: 8px;
+}
+
+.form-success {
+  padding: 1.75rem;
+  text-align: center;
+  background: var(--c-surface);
+  border: 1px solid var(--c-success);
+  border-radius: var(--radius);
+}
+
+.form-success__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  color: var(--c-success);
+}
+
+.form-success p {
+  margin: 0 0 1.25rem;
+  color: var(--c-ink-2);
+}
+
+@media (max-width: 860px) {
+  .contact {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+}

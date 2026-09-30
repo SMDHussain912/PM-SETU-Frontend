@@ -1,0 +1,11 @@
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+  gap: 1rem;
+}
+
+.kpi-note {
+  margin: 1.25rem 0 0;
+  font-size: 0.82rem;
+  color: var(--c-muted);
+}

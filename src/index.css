@@ -1,0 +1,254 @@
+/* ============================================================================
+   PM SETU - Andhra Pradesh | design tokens & global styles
+   ========================================================================= */
+
+:root {
+  /* typography — Telugu needs an explicit fallback or the browser falls back
+     to a system font that may not carry Telugu glyphs (plan §19) */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans',
+    'Noto Sans Telugu', Gautami, 'Helvetica Neue', sans-serif;
+
+  /* palette — navy + saffron, inspired by the Indian tricolor */
+  --c-navy: #0b132e;
+  --c-navy-2: #14204a;
+  --c-amber: #ff7a00;          /* brand saffron: fills, borders, decoration only */
+  /* Foreground-safe saffron. #ff7a00 is only 2.61:1 on white, which fails
+     WCAG AA (4.5:1) for text AND for white text on it as a button fill.
+     #b35100 reaches 5.13:1 in both directions while staying in the same hue. */
+  --c-amber-text: #b35100;
+  --c-amber-btn: #b35100;      /* button background behind white label */
+  /* For fixed-dark surfaces (the leadership banner keeps its own navy
+     gradient in every theme). Pinned, not theme-following: #ff7a00 scores
+     5.27:1 on the banner's #0d2b5e, while #b35100 would drop to 2.69:1. */
+  --c-amber-on-dark: #ff7a00;
+  --c-amber-soft: #fff3e6;
+  --c-ink: #0f1216;
+  --c-ink-2: #303640;
+  /* Link colour that stays a LINK in both themes. --c-navy is a surface token:
+     in dark mode it is #030712 on #0b0c14 (1.03:1, unreadable). Light mode
+     keeps the original navy; dark mode uses a light blue at 9.71:1. */
+  --c-link: #0b132e;
+  --c-muted: #6b7280;
+  --c-bg: #ffffff;
+  --c-surface: #f8f9fc;
+  --c-border: #e5e7eb;
+  --c-amber-glow: rgba(255, 122, 0, 0.1);
+  --c-shadow: 0 4px 6px -1px rgba(15, 18, 22, 0.08),
+    0 2px 4px -2px rgba(15, 18, 22, 0.04);
+
+  --c-success: #0e9b7a;
+  --c-sky: #0ea5e9;
+  /* Focus indicator. --c-sky is only 2.77:1 on white, below the 3:1 WCAG 2.1
+     requirement for focus indicators; --c-focus clears it on every light
+     surface (4.10:1 white, 3.78:1 on the pale utility strip). Dark surfaces
+     such as the primary nav use a white ring instead. */
+  --c-focus: #0284c7;
+  --radius: 12px;
+  --radius-lg: 16px;
+
+  --max-width: 1180px;
+  --transition: 0.25s ease;
+
+  /* ── Government identity band ────────────────────────────────────────────
+     The header is PINNED and deliberately does NOT follow the theme. An
+     official Government of India / AP identity band is always white with
+     government-blue navigation; letting it invert to near-black (#0b0c14)
+     made the portal read as a product/industrial site rather than a
+     government one. These tokens are intentionally constant. */
+  --c-gov-header: #ffffff;    /* brand + utility band */
+  --c-gov-band: #f4f6f9;      /* utility strip / hairlines */
+  --c-gov-border: #d8dee8;
+  --c-gov-blue: #063b82;      /* primary nav — standard NIC/government blue */
+  --c-gov-blue-dark: #052e66; /* nav hover / active */
+  --c-gov-ink: #16202e;       /* text on the white band */
+  --c-gov-muted: #4a5568;     /* secondary text on the white band */
+}
+
+/* Theme follows the OS unless the user overrides it in the utility bar.
+   index.css is imported first, so these two blocks override the :root values
+   above at equal specificity. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --c-navy: #030712;
+    --c-navy-2: #0d1a3a;
+    --c-amber: #ffb27a;
+    --c-amber-text: #ffb27a;
+    --c-amber-btn: #b35100;
+    --c-amber-soft: #2b1a0c;
+    --c-ink: #f8f9fc;
+    --c-ink-2: #d2d7e0;
+    --c-link: #9db8e8;
+    --c-muted: #9aa3b8;
+    --c-bg: #0b0c14;
+    --c-surface: #141722;
+    --c-border: #242b3b;
+    --c-amber-glow: rgba(255, 178, 122, 0.12);
+    --c-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.35),
+      0 2px 4px -2px rgba(0, 0, 0, 0.45);
+  }
+}
+
+:root[data-theme='dark'] {
+  --c-navy: #030712;
+  --c-navy-2: #0d1a3a;
+  --c-amber: #ffb27a;
+  --c-amber-text: #ffb27a;
+  --c-amber-btn: #b35100;
+  --c-amber-soft: #2b1a0c;
+  --c-ink: #f8f9fc;
+  --c-ink-2: #d2d7e0;
+  --c-link: #9db8e8;
+  --c-muted: #9aa3b8;
+  --c-bg: #0b0c14;
+  --c-surface: #141722;
+  --c-border: #242b3b;
+  --c-amber-glow: rgba(255, 178, 122, 0.12);
+  --c-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.35),
+    0 2px 4px -2px rgba(0, 0, 0, 0.45);
+}
+
+/* High-contrast mode (plan §26) — strengthens borders and focus rings. */
+:root[data-contrast='high'] {
+  --c-border: #6b7280;
+  --c-muted: #374151;
+  --c-shadow: none;
+}
+
+:root[data-contrast='high'] a,
+:root[data-contrast='high'] button {
+  text-underline-offset: 3px;
+}
+
+/* Font scaling (plan §26 "Font resizing"). Driving the root font size keeps
+   every rem-based measurement consistent. */
+:root[data-font-scale='sm'] { font-size: 14px; }
+:root[data-font-scale='base'] { font-size: 16px; }
+:root[data-font-scale='lg'] { font-size: 18.5px; }
+
+/* base reset */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font: 1rem/1.55 var(--font-sans);
+  background: var(--c-bg);
+  color: var(--c-ink-2);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root { min-height: 100svh; }
+
+/* a11y helpers */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip link — previously referenced in the header with NO css rule at all, so
+   it rendered permanently visible in the top bar. Now hidden until focused. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  z-index: 2000;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--c-navy);
+  border-radius: 0 0 6px 0;
+  text-decoration: none;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  left: 0;
+  top: 0;
+  outline: 3px solid var(--c-focus);
+  outline-offset: 2px;
+}
+
+/* shared primitives */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.018em;
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+p { margin: 0; overflow-wrap: break-word; }
+a { color: inherit; text-decoration: none; }
+ul, ol { margin: 0; padding: 0; }
+img, svg { max-width: 100%; display: block; }
+
+:focus-visible {
+  outline: 2px solid var(--c-focus);
+  outline-offset: 2px;
+}
+
+/* buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  padding: 0.7rem 1.25rem;
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--c-focus);
+  outline-offset: 2px;
+}
+
+.btn--primary {
+  background: var(--c-amber-btn);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(179, 81, 0, 0.35);
+}
+
+.btn--primary:hover {
+  background: #8f3d00;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(255, 122, 0, 0.4);
+}
+
+.btn--secondary { background: var(--c-navy-2); color: #fff; }
+.btn--secondary:hover { background: #20306a; }
+
+.btn--ghost {
+  background: transparent;
+  color: var(--c-ink-2);
+  border: 1px solid var(--c-border);
+}
+
+.btn--ghost:hover { background: var(--c-surface); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

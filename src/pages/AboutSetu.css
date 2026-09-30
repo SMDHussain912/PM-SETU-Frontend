@@ -1,0 +1,123 @@
+/* About PM SETU — two-column layout: contents rail + content (plan §7).
+   Replaces the previous 346-line sheet whose .gov-* selectors were never used. */
+
+.about-layout {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: start;
+  padding-block: 1.75rem 3rem;
+}
+
+.about-layout__toc {
+  position: sticky;
+  top: 60px;
+  padding: 1rem 0.85rem;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 8px;
+}
+
+.about-layout__toc-title {
+  margin: 0 0 0.45rem;
+  padding-bottom: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--c-ink);
+  border-bottom: 2px solid var(--c-amber);
+}
+
+.about-layout__toc-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: about-toc;
+}
+
+.about-layout__toc-list li {
+  counter-increment: about-toc;
+}
+
+.about-layout__toc-list a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.65rem;
+  font-size: 0.86rem;
+  color: var(--c-ink-2);
+  border-bottom: 1px solid var(--c-border);
+  text-decoration: none;
+  transition: background var(--transition), color var(--transition);
+}
+
+.about-layout__toc-list a::before {
+  content: counter(about-toc, decimal-leading-zero);
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.6rem;
+  height: 1.6rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--c-navy);
+  border-radius: 4px;
+}
+
+.about-layout__toc-list a:hover,
+.about-layout__toc-list a:focus-visible {
+  background: var(--c-amber-soft);
+  color: var(--c-amber-text);
+}
+
+.about-layout__content {
+  padding: 1.5rem 1.75rem 2rem;
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: 8px;
+  box-shadow: var(--c-shadow);
+}
+
+.about-block {
+  margin-bottom: 1.75rem;
+  scroll-margin-top: 64px;
+}
+
+.about-block:last-child {
+  margin-bottom: 0;
+}
+
+.about-block__title {
+  margin: 0 0 0.5rem;
+  padding-left: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--c-ink);
+  border-left: 4px solid var(--c-amber);
+}
+
+.about-block__body {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: var(--c-ink-2);
+}
+
+@media (max-width: 900px) {
+  .about-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .about-layout__toc {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .about-layout {
+    padding-block: 1.25rem 2rem;
+  }
+
+  .about-layout__content {
+    padding: 1.25rem 1.1rem;
+  }
+}
