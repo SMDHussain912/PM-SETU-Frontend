@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import PageHeader from '../components/common/PageHeader'
+import { useAuth } from '../context/AuthProvider'
 import { api } from '../lib/api'
 import './ItiOperationalWorkspace.css'
 
@@ -17,6 +18,7 @@ const EMPTY_REPORT = { report_type: 'MONTHLY_PROGRESS', title: '', payloadText: 
 
 export default function ItiOperationalWorkspace() {
   const { itiId } = useParams()
+  const { user } = useAuth()
   const [institute, setInstitute] = useState(null)
   const [profile, setProfile] = useState(EMPTY_PROFILE)
   const [reports, setReports] = useState([])
@@ -95,7 +97,7 @@ export default function ItiOperationalWorkspace() {
     finally { setSaving(false) }
   }
 
-  const roles = JSON.parse(sessionStorage.getItem('pmsetu_user') || 'null')?.roles || []
+  const roles = user?.roles || []
   const canReview = roles.some(r => ['cluster_admin','state_pmu_admin','super_admin','approving_authority'].includes(r.code))
   if (loading) return <div className="container page-section">Loading institute workspace…</div>
 
