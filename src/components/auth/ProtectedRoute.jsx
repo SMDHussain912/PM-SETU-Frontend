@@ -1,23 +1,27 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthProvider'
+import { getRouteAccess } from '../../lib/route-access'
 
 const ProtectedRoute = ({ roles, permissions }) => {
-  const { loading, isAuthenticated, hasRole, hasPermission } = useAuth()
+  const { loading, isAuthenticated, user } = useAuth()
   const location = useLocation()
+  const access = getRouteAccess({
+    loading,
+    isAuthenticated,
+    user,
+    roles,
+    permissions,
+  })
 
-  if (loading) {
+  if (access === 'loading') {
     return <div className="container page-section" role="status">Checking your official session…</div>
   }
 
-  if (!isAuthenticated) {
+  if (access === 'unauthenticated') {
     return <Navigate to="/login" replace state={{ from: location }} />
   }
 
-  if (roles?.length && !hasRole(roles)) {
-    return <Navigate to="/official?access=denied" replace />
-  }
-
-  if (permissions?.length && !permissions.every(hasPermission)) {
+  if (access === 'forbidden') {
     return <Navigate to="/official?access=denied" replace />
   }
 
