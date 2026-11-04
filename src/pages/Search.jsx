@@ -217,7 +217,7 @@ const Search = () => {
             isEmpty={results.length === 0}
             onRetry={refetch}
             emptyTitle={`No results for “${filters.q}”`}
-            emptyMessage="Try a different term, relax the filters, or browse the portal categories above."
+            emptyMessage="Try a different term, relax the filters, or clear your search to browse portal categories."
             skeletonRows={3}
           >
             <p className="search-count">
