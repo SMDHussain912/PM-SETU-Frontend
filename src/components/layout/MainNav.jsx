@@ -7,7 +7,7 @@ import './MainNav.css'
 const MainNav = () => {
   const { t } = useI18n()
   const { isAuthenticated, hasRole } = useAuth()
-  const canOpenAdmin = hasRole(['super_admin', 'state_pmu_admin'])
+  const canOpenAdmin = hasRole(['super_admin', 'state_pmu_admin', 'det_content_admin', 'approving_authority'])
 
   return (
     <nav className="main-nav" aria-label="Primary">

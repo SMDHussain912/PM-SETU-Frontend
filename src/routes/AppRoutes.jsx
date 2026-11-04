@@ -62,7 +62,7 @@ const AppRoutes = () => (
 
       <Route element={<ProtectedRoute />}>
         <Route path="official" element={<OfficialWorkspace />} />
-        <Route element={<ProtectedRoute roles={['super_admin', 'state_pmu_admin']} />}>
+        <Route element={<ProtectedRoute roles={['super_admin', 'state_pmu_admin', 'det_content_admin', 'approving_authority']} />}>
           <Route path="admin" element={<AdminDashboard />} />
         </Route>
       </Route>

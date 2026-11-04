@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import PageHeader from '../components/common/PageHeader'
 import { useAuth } from '../context/AuthProvider'
 import { api } from '../lib/api'
+import AdminContentWorkspace from './AdminContentWorkspace'
 import './AdminDashboard.css'
 
 const TABS = [
@@ -11,6 +12,7 @@ const TABS = [
   ['roles', 'Roles & permissions'],
   ['approvals', 'Approvals'],
   ['audit', 'Audit logs'],
+  ['content', 'Content & communications'],
 ]
 const TRANSITIONS = {
   SUBMITTED: ['review'],
@@ -56,6 +58,8 @@ const AdminDashboard = () => {
   const canReadApprovals = hasRole(['super_admin', 'state_pmu_admin', 'approving_authority'])
   const canManageUsers = hasRole(['super_admin', 'state_pmu_admin'])
   const canManageRoles = isSuperAdmin
+  const canManageContent = hasRole(['super_admin', 'state_pmu_admin', 'det_content_admin'])
+  const canManageContact = hasRole(['super_admin', 'state_pmu_admin'])
   const canWriteApprovals = hasRole(['super_admin', 'state_pmu_admin', 'det_content_admin', 'approving_authority'])
 
   const loadUsers = useCallback(async () => {
@@ -164,7 +168,7 @@ const AdminDashboard = () => {
         </section>
         <ErrorMessage>{error}</ErrorMessage><Notice>{notice}</Notice>
         <nav className="admin-tabs" aria-label="Administration sections">
-          {TABS.filter(([id]) => id === 'overview' || (id === 'users' && canManageUsers) || (id === 'roles' && canManageRoles) || (id === 'approvals' && canReadApprovals) || (id === 'audit' && canReadAudit)).map(([id, label]) => <button key={id} type="button" className={tab === id ? 'is-active' : ''} onClick={() => setTab(id)}>{label}</button>)}
+          {TABS.filter(([id]) => id === 'overview' || (id === 'users' && canManageUsers) || (id === 'roles' && canManageRoles) || (id === 'approvals' && canReadApprovals) || (id === 'audit' && canReadAudit) || (id === 'content' && (canManageContent || canManageContact))).map(([id, label]) => <button key={id} type="button" className={tab === id ? 'is-active' : ''} onClick={() => setTab(id)}>{label}</button>)}
         </nav>
 
         {tab === 'overview' && <>
@@ -174,6 +178,7 @@ const AdminDashboard = () => {
             {canManageRoles && <button className="admin-module" onClick={() => setTab('roles')}><strong>Roles & permissions</strong><small>Create custom roles and manage permission assignments. System roles remain protected.</small></button>}
             {canReadApprovals && <button className="admin-module" onClick={() => setTab('approvals')}><strong>Approval workflow</strong><small>Review submissions, approve, reject or request revisions.</small></button>}
             {canReadAudit && <button className="admin-module" onClick={() => setTab('audit')}><strong>Audit trail</strong><small>Search recorded administrative and workflow actions.</small></button>}
+            {(canManageContent || canManageContact) && <button className="admin-module" onClick={() => setTab('content')}><strong>Content & communications</strong><small>Manage documents, news, gallery, banners and public enquiries.</small></button>}
           </div></section>
         </>}
 
@@ -208,6 +213,8 @@ const AdminDashboard = () => {
           <div className="admin-filter-row"><select value={filters.approvalStatus} onChange={(e) => setFilters({ ...filters, approvalStatus: e.target.value })}><option value="">All statuses</option>{['PENDING','SUBMITTED','UNDER_REVIEW','REVISION_REQUESTED','RECOMMENDED','APPROVED','REJECTED'].map((s) => <option key={s}>{s}</option>)}</select></div>
           <div className="admin-table-wrap"><table className="admin-table"><thead><tr><th>ID</th><th>Entity</th><th>Status</th><th>Submitted by</th><th>Remarks</th><th>Actions</th></tr></thead><tbody>{approvals.map((item) => <tr key={item.id}><td>#{item.id}</td><td>{item.entity_type} #{item.entity_id}</td><td>{item.status}</td><td>{item.submitted_by?.name || item.submitted_by?.id || '—'}</td><td><input aria-label={`Remarks for approval ${item.id}`} value={remarks[item.id] || ''} onChange={(e) => setRemarks((current) => ({ ...current, [item.id]: e.target.value }))} placeholder="Optional remarks" /></td><td className="admin-row-actions">{canWriteApprovals ? (TRANSITIONS[item.status] || []).map((action) => <button type="button" key={action} onClick={() => transitionApproval(item, action)}>{ACTION_LABELS[action]}</button>) : 'Read only'}</td></tr>)}{!approvals.length && <tr><td colSpan="6">No approval records found.</td></tr>}</tbody></table></div>
         </section>}
+
+        {tab === 'content' && (canManageContent || canManageContact) && <AdminContentWorkspace canManageContact={canManageContact} />}
 
         {tab === 'audit' && canReadAudit && <section className="admin-section"><div className="admin-section-heading"><div><h2>Audit logs</h2><p>Append-only operational history. Audit records cannot be edited or deleted.</p></div></div>
           <div className="admin-filter-row"><input placeholder="Filter action (e.g. UPDATE)" value={filters.auditAction} onChange={(e) => setFilters({ ...filters, auditAction: e.target.value })} /><input placeholder="Filter entity (e.g. USER)" value={filters.auditEntity} onChange={(e) => setFilters({ ...filters, auditEntity: e.target.value })} /></div>
