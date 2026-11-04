@@ -64,7 +64,7 @@ export default function RoleWorkspace() {
         {loading ? <p>Loading assignments…</p> : error ? <p className="role-workspace__error" role="alert">{error}</p> : scopes.length ? <div className="role-workspace__grid">
           {scopes.map((scope) => <article className="role-workspace__card" key={scope.id}>
             <div><span className="role-workspace__type">{scope.scope_type}</span><h3>{scope.scope_name}</h3><p>Assigned organisation record · ID {scope.scope_id}</p></div>
-            <Link to={scope.scope_type === 'ITI' ? '/workspace/itis/' + scope.scope_id : scope.scope_type === 'AIP' ? '/workspace/aips/' + scope.scope_id : (SCOPE_LINKS[scope.scope_type] || '/dashboard')}>{scope.scope_type === 'ITI' ? 'Manage institute' : scope.scope_type === 'AIP' ? 'Manage industry partner' : 'Open directory'} <span aria-hidden="true">→</span></Link>
+            <Link to={scope.scope_type === 'ITI' ? '/workspace/itis/' + scope.scope_id : scope.scope_type === 'AIP' ? '/workspace/aips/' + scope.scope_id : scope.scope_type === 'SPV' ? '/workspace/spvs/' + scope.scope_id : (SCOPE_LINKS[scope.scope_type] || '/dashboard')}>{scope.scope_type === 'ITI' ? 'Manage institute' : scope.scope_type === 'AIP' ? 'Manage industry partner' : scope.scope_type === 'SPV' ? 'Manage SPV' : 'Open directory'} <span aria-hidden="true">→</span></Link>
           </article>)}
         </div> : <p className="role-workspace__error">No organisation scopes are assigned yet. Please contact your State PMU administrator.</p>}
       </section>}
