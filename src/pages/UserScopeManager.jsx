@@ -15,10 +15,11 @@ export default function UserScopeManager({ user, onClose, onSaved }) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
-  const roleCodes = (user.roles || []).map((role) => role.code)
+  const roleKey = (user.roles || []).map((role) => role.code).join('|')
+  const roleCodes = roleKey.split('|')
   const sources = useMemo(() => SCOPE_SOURCES.filter((source) =>
     source.roles ? source.roles.some((role) => roleCodes.includes(role)) : roleCodes.includes(source.role)
-  ), [roleCodes.join('|')])
+  ), [roleKey])
 
   const load = useCallback(async () => {
     setLoading(true); setError('')
