@@ -17,7 +17,7 @@ const ROLE_INFO = {
   spv_user: ['SPV workspace', 'Access the SPV records assigned to your account.'],
   dashboard_viewer: ['Programme reporting workspace', 'Read-only programme indicators and public reference information.'],
 }
-const SCOPE_LINKS = { CLUSTER: '/clusters', AIP: '/industry-partners', SPV: '/spvs' }
+const SCOPE_LINKS = { CLUSTER: '/clusters', SPV: '/spvs' }
 const ROLE_LINKS = {
   super_admin: [['Administration centre', '/admin']],
   state_pmu_admin: [['State administration', '/admin'], ['Programme dashboard', '/dashboard']],
@@ -64,7 +64,7 @@ export default function RoleWorkspace() {
         {loading ? <p>Loading assignments…</p> : error ? <p className="role-workspace__error" role="alert">{error}</p> : scopes.length ? <div className="role-workspace__grid">
           {scopes.map((scope) => <article className="role-workspace__card" key={scope.id}>
             <div><span className="role-workspace__type">{scope.scope_type}</span><h3>{scope.scope_name}</h3><p>Assigned organisation record · ID {scope.scope_id}</p></div>
-            <Link to={scope.scope_type === 'ITI' ? '/workspace/itis/' + scope.scope_id : (SCOPE_LINKS[scope.scope_type] || '/dashboard')}>{scope.scope_type === 'ITI' ? 'Manage institute' : 'Open directory'} <span aria-hidden="true">→</span></Link>
+            <Link to={scope.scope_type === 'ITI' ? '/workspace/itis/' + scope.scope_id : scope.scope_type === 'AIP' ? '/workspace/aips/' + scope.scope_id : (SCOPE_LINKS[scope.scope_type] || '/dashboard')}>{scope.scope_type === 'ITI' ? 'Manage institute' : scope.scope_type === 'AIP' ? 'Manage industry partner' : 'Open directory'} <span aria-hidden="true">→</span></Link>
           </article>)}
         </div> : <p className="role-workspace__error">No organisation scopes are assigned yet. Please contact your State PMU administrator.</p>}
       </section>}
