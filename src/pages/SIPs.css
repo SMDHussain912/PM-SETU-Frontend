@@ -1,4 +1,76 @@
-.sips-page { --sips-accent: var(--c-sky); }
+.sips-page { --sips-accent: var(--c-sky); }\n
+/* SIP page hero and section heading styles (kept local to this page). */
+.sips-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  overflow: hidden;
+  padding: clamp(1.4rem, 4vw, 2.5rem);
+  margin-bottom: 2rem;
+  border: 1px solid var(--c-border);
+  border-radius: calc(var(--radius) * 1.4);
+  background: linear-gradient(115deg, var(--c-surface), var(--c-bg));
+}
+
+.sips-intro__copy { max-width: 43rem; }
+
+.sips-eyebrow {
+  display: inline-block;
+  margin-bottom: 0.65rem;
+  color: var(--c-amber-text);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+}
+
+.sips-intro h2 {
+  margin: 0;
+  color: var(--c-ink);
+  font-size: clamp(1.45rem, 3vw, 2.1rem);
+  line-height: 1.2;
+}
+
+.sips-intro p {
+  max-width: 62ch;
+  margin: 0.7rem 0 0;
+  color: var(--c-ink-2);
+  font-size: 0.96rem;
+  line-height: 1.7;
+}
+
+.sips-intro__visual {
+  flex: 0 0 min(34%, 15rem);
+  color: var(--c-sky);
+}
+
+.sips-intro__visual svg {
+  display: block;
+  width: 100%;
+  max-height: 11rem;
+}
+
+.sips-section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sips-section-heading h2 {
+  margin: 0;
+  color: var(--c-ink);
+  font-size: 1.3rem;
+}
+
+.sips-section-heading p {
+  margin: 0.35rem 0 0;
+  color: var(--c-muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
 
 .sips-intro {
   margin-bottom: 2rem;
@@ -215,7 +287,7 @@
 }
 
 @media (max-width: 650px) {
-  .sips-contribution-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sips-intro { padding: 1.25rem; }\n  .sips-intro__visual { display: none; }\n  .sips-section-heading { align-items: flex-start; flex-direction: column; }\n  .sips-contribution-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sips-timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sips-timeline__step,
   .sips-timeline__step:nth-child(4) { border-right: 1px solid var(--c-border); }
