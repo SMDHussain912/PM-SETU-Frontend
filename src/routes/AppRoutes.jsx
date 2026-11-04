@@ -69,12 +69,12 @@ const AppRoutes = () => (
         <Route path="workspace" element={<RoleWorkspace />} />
         <Route element={<ProtectedRoute roles={["hub_iti_user", "spoke_iti_user", "cluster_admin", "state_pmu_admin", "super_admin", "approving_authority"]} />}>
           <Route path="workspace/itis/:itiId" element={<ItiOperationalWorkspace />} />
-          <Route element={<ProtectedRoute roles={["aip_user", "cluster_admin", "state_pmu_admin", "super_admin", "approving_authority"]} />}>
-            <Route path="workspace/aips/:aipId" element={<AipOperationalWorkspace />} />
-          <Route element={<ProtectedRoute roles={["spv_user", "cluster_admin", "state_pmu_admin", "super_admin", "approving_authority"]} />}>
-            <Route path="workspace/spvs/:spvId" element={<SpvOperationalWorkspace />} />
-          </Route>
-          </Route>
+        </Route>
+        <Route element={<ProtectedRoute roles={["aip_user", "cluster_admin", "state_pmu_admin", "super_admin", "approving_authority"]} />}>
+          <Route path="workspace/aips/:aipId" element={<AipOperationalWorkspace />} />
+        </Route>
+        <Route element={<ProtectedRoute roles={["spv_user", "cluster_admin", "state_pmu_admin", "super_admin", "approving_authority"]} />}>
+          <Route path="workspace/spvs/:spvId" element={<SpvOperationalWorkspace />} />
         </Route>
         <Route element={<ProtectedRoute roles={['super_admin', 'state_pmu_admin', 'det_content_admin', 'approving_authority']} />}>
           <Route path="admin" element={<AdminDashboard />} />
