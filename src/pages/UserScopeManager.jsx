@@ -26,7 +26,7 @@ export default function UserScopeManager({ user, onClose, onSaved }) {
     try {
       const [current, ...lists] = await Promise.all([
         api.get(`/admin/users/${user.id}/scopes`),
-        ...sources.map((source) => api.get(source.endpoint, { page: 1, pageSize: 500 })),
+        ...sources.map((source) => api.get(source.endpoint, { page: 1, pageSize: 100 })),
       ])
       const nextOptions = {}
       sources.forEach((source, index) => { nextOptions[source.type] = lists[index].data || [] })
