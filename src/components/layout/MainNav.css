@@ -1,15 +1,9 @@
-/* Primary navigation — plan §2 */
-
-/* Government blue, not near-black navy: #063b82 is the standard NIC /
-   Government of India navigation blue. --c-navy (#0b132e) read as a
-   product/industrial palette. Pinned so it never inverts with the theme. */
 .main-nav {
   background: var(--c-gov-blue);
   position: sticky;
   top: 0;
   z-index: 100;
 }
-
 .main-nav__list {
   display: flex;
   flex-wrap: wrap;
@@ -18,19 +12,14 @@
   padding: 0;
   list-style: none;
 }
-
-.main-nav__item {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.main-nav__link {
+.main-nav__item { flex: 1 1 auto; min-width: 0; }
+.main-nav__link, .main-nav__auth-link {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 44px;
-  padding: 0.5rem 0.55rem;
-  font-size: 0.75rem;
+  padding: .5rem .55rem;
+  font-size: .75rem;
   line-height: 1.25;
   text-align: center;
   color: #fff;
@@ -38,36 +27,34 @@
   border-bottom: 3px solid transparent;
   transition: background var(--transition), border-color var(--transition);
 }
-
-.main-nav__link:hover {
+.main-nav__link:hover, .main-nav__auth-link:hover {
   background: var(--c-navy-2);
   border-bottom-color: var(--c-amber-text);
 }
-
-.main-nav__link:focus-visible {
+.main-nav__link:focus-visible, .main-nav__auth-link:focus-visible {
   outline: 2px solid #fff;
   outline-offset: -4px;
 }
-
-.main-nav__link.is-active {
+.main-nav__link.is-active, .main-nav__auth-link.is-active {
   background: var(--c-navy-2);
   border-bottom-color: var(--c-amber-text);
   font-weight: 700;
 }
-
-@media (max-width: 900px) {
-  .main-nav__item {
-    flex: 1 1 33%;
-  }
+.main-nav__auth-item { flex: 0 0 auto; }
+.main-nav__auth-link {
+  min-height: 36px;
+  margin: 4px 8px;
+  padding: .45rem .9rem;
+  border: 1px solid rgba(255,255,255,.65);
+  border-radius: 999px;
+  font-weight: 700;
 }
-
+@media (max-width: 900px) {
+  .main-nav__item { flex: 1 1 33%; }
+  .main-nav__auth-item { flex: 1 1 100%; display: flex; justify-content: center; }
+}
 @media (max-width: 600px) {
-  .main-nav__item {
-    flex: 1 1 50%;
-  }
-
-  .main-nav__link {
-    min-height: 44px;
-    font-size: 0.72rem;
-  }
+  .main-nav__item { flex: 1 1 50%; }
+  .main-nav__link { min-height: 44px; font-size: .72rem; }
+  .main-nav__auth-link { width: min(100% - 1rem, 20rem); }
 }
