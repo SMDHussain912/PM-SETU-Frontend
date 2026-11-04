@@ -6,6 +6,7 @@ import Login from '../pages/Login'
 import OfficialWorkspace from '../pages/OfficialWorkspace'
 import AdminDashboard from '../pages/AdminDashboard'
 import RoleWorkspace from '../pages/RoleWorkspace'
+import ItiOperationalWorkspace from '../pages/ItiOperationalWorkspace'
 
 import Home from '../pages/Home'
 import AboutSetu from '../pages/AboutSetu'
@@ -64,6 +65,9 @@ const AppRoutes = () => (
       <Route element={<ProtectedRoute />}>
         <Route path="official" element={<OfficialWorkspace />} />
         <Route path="workspace" element={<RoleWorkspace />} />
+        <Route element={<ProtectedRoute roles={["hub_iti_user", "spoke_iti_user", "cluster_admin", "state_pmu_admin", "super_admin", "approving_authority"]} />}>
+          <Route path="workspace/itis/:itiId" element={<ItiOperationalWorkspace />} />
+        </Route>
         <Route element={<ProtectedRoute roles={['super_admin', 'state_pmu_admin', 'det_content_admin', 'approving_authority']} />}>
           <Route path="admin" element={<AdminDashboard />} />
         </Route>
