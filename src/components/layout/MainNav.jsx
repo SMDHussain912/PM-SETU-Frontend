@@ -23,6 +23,11 @@ const MainNav = () => {
         {canOpenAdmin && <li className="main-nav__auth-item">
           <NavLink to="/admin" className={({ isActive }) => isActive ? 'main-nav__auth-link is-active' : 'main-nav__auth-link'}>Administration</NavLink>
         </li>}
+        {isAuthenticated && <li className="main-nav__auth-item">
+          <NavLink to="/workspace" className={({ isActive }) => `main-nav__auth-link${isActive ? ' is-active' : ''}`}>
+            My workspace
+          </NavLink>
+        </li>}
         <li className="main-nav__auth-item">
           <NavLink to={isAuthenticated ? '/official' : '/login'}
             className={({ isActive }) => `main-nav__auth-link${isActive ? ' is-active' : ''}`}>
