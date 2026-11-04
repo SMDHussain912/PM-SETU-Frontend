@@ -98,7 +98,7 @@ export default function ItiOperationalWorkspace() {
   }
 
   const roles = user?.roles || []
-  const canReview = roles.some(r => ['cluster_admin','state_pmu_admin','super_admin','approving_authority'].includes(r.code))
+  const canReview = roles.some(r => ['cluster_admin','state_pmu_admin','super_admin'].includes(r.code))
   if (loading) return <div className="container page-section">Loading institute workspace…</div>
 
   return <>
