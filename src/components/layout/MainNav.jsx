@@ -6,7 +6,8 @@ import './MainNav.css'
 
 const MainNav = () => {
   const { t } = useI18n()
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, hasRole } = useAuth()
+  const canOpenAdmin = hasRole(['super_admin', 'state_pmu_admin'])
 
   return (
     <nav className="main-nav" aria-label="Primary">
@@ -19,6 +20,9 @@ const MainNav = () => {
             </NavLink>
           </li>
         ))}
+        {canOpenAdmin && <li className="main-nav__auth-item">
+          <NavLink to="/admin" className={({ isActive }) => isActive ? 'main-nav__auth-link is-active' : 'main-nav__auth-link'}>Administration</NavLink>
+        </li>}
         <li className="main-nav__auth-item">
           <NavLink to={isAuthenticated ? '/official' : '/login'}
             className={({ isActive }) => `main-nav__auth-link${isActive ? ' is-active' : ''}`}>
