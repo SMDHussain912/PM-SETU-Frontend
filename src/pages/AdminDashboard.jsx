@@ -4,6 +4,7 @@ import PageHeader from '../components/common/PageHeader'
 import { useAuth } from '../context/AuthProvider'
 import { api } from '../lib/api'
 import AdminContentWorkspace from './AdminContentWorkspace'
+import UserScopeManager from './UserScopeManager'
 import './AdminDashboard.css'
 
 const TABS = [
@@ -49,6 +50,7 @@ const AdminDashboard = () => {
   const [notice, setNotice] = useState('')
   const [userForm, setUserForm] = useState(emptyUser)
   const [editingUser, setEditingUser] = useState(null)
+  const [scopeUser, setScopeUser] = useState(null)
   const [roleForm, setRoleForm] = useState(emptyRole)
   const [editingRole, setEditingRole] = useState(null)
   const [remarks, setRemarks] = useState({})
@@ -194,7 +196,8 @@ const AdminDashboard = () => {
             <div className="admin-actions"><button className="btn btn--primary" type="submit" disabled={!userForm.role_ids.length}>{editingUser ? 'Save account' : 'Create account'}</button>{editingUser && <button className="btn btn--ghost" type="button" onClick={() => { setEditingUser(null); setUserForm(emptyUser) }}>Cancel</button>}</div>
           </form>
           <div className="admin-filter-row"><input aria-label="Search users" placeholder="Search name or username" value={filters.search} onChange={(e) => setFilters({ ...filters, search: e.target.value })} /><select aria-label="Filter user status" value={filters.status} onChange={(e) => setFilters({ ...filters, status: e.target.value })}><option value="">All statuses</option><option value="ACTIVE">Active</option><option value="INACTIVE">Inactive</option></select></div>
-          <div className="admin-table-wrap"><table className="admin-table"><thead><tr><th>Name</th><th>Username</th><th>Email</th><th>Roles</th><th>Status</th><th>Actions</th></tr></thead><tbody>{users.map((item) => <tr key={item.id}><td>{item.full_name}</td><td>{item.username}</td><td>{item.email || '—'}</td><td>{(item.roles || []).map((r) => r.name).join(', ') || '—'}</td><td>{item.status}</td><td className="admin-row-actions"><button type="button" onClick={() => startEditUser(item)}>Edit</button><button type="button" onClick={() => runAction(() => api.patch(`/admin/users/${item.id}/status`, { status: item.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE' }), `Account ${item.status === 'ACTIVE' ? 'deactivated' : 'activated'}.`)}>{item.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}</button></td></tr>)}{!users.length && <tr><td colSpan="6">No accounts found.</td></tr>}</tbody></table></div>
+          <div className="admin-table-wrap"><table className="admin-table"><thead><tr><th>Name</th><th>Username</th><th>Email</th><th>Roles</th><th>Status</th><th>Actions</th></tr></thead><tbody>{users.map((item) => <tr key={item.id}><td>{item.full_name}</td><td>{item.username}</td><td>{item.email || '—'}</td><td>{(item.roles || []).map((r) => r.name).join(', ') || '—'}</td><td>{item.status}</td><td className="admin-row-actions"><button type="button" onClick={() => startEditUser(item)}>Edit</button><button type="button" onClick={() => setScopeUser(item)}>Organisation access</button><button type="button" onClick={() => runAction(() => api.patch(`/admin/users/${item.id}/status`, { status: item.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE' }), `Account ${item.status === 'ACTIVE' ? 'deactivated' : 'activated'}.`)}>{item.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}</button></td></tr>)}{!users.length && <tr><td colSpan="6">No accounts found.</td></tr>}</tbody></table></div>
+          {scopeUser && <UserScopeManager user={scopeUser} onClose={() => setScopeUser(null)} onSaved={refresh} />}
         </section>}
 
         {tab === 'roles' && canManageRoles && <section className="admin-section">
