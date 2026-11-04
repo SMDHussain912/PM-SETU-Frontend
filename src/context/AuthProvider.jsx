@@ -6,7 +6,7 @@ const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(() => Boolean(getAccessToken()))
 
   const logout = useCallback(() => {
     clearAccessToken()
@@ -16,10 +16,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     let active = true
 
-    if (!getAccessToken()) {
-      setLoading(false)
-      return undefined
-    }
+    if (!getAccessToken()) return undefined
 
     api.get('/auth/me')
       .then(({ data }) => {
