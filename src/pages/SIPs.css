@@ -288,7 +288,10 @@
 }
 
 @media (max-width: 650px) {
-  .sips-intro { padding: 1.25rem; }\n  .sips-intro__visual { display: none; }\n  .sips-section-heading { align-items: flex-start; flex-direction: column; }\n  .sips-contribution-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sips-intro { padding: 1.25rem; }
+  .sips-intro__visual { display: none; }
+  .sips-section-heading { align-items: flex-start; flex-direction: column; }
+  .sips-contribution-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sips-timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sips-timeline__step,
   .sips-timeline__step:nth-child(4) { border-right: 1px solid var(--c-border); }
