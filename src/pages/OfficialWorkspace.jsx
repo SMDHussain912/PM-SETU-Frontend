@@ -19,6 +19,10 @@ const OfficialWorkspace = () => {
   const [notice, setNotice] = useState('')
   const [creating, setCreating] = useState(false)
   const [form, setForm] = useState({ username: '', full_name: '', email: '', password: '', role_id: '' })
+  const [passwordForm, setPasswordForm] = useState({ current_password: '', new_password: '' })
+  const [passwordNotice, setPasswordNotice] = useState('')
+  const [passwordError, setPasswordError] = useState('')
+  const [changingPassword, setChangingPassword] = useState(false)
 
   const loadUsers = useCallback(async () => {
     if (!canManageUsers) return
@@ -64,6 +68,22 @@ const OfficialWorkspace = () => {
     }
   }
 
+  const handlePasswordChange = async (event) => {
+    event.preventDefault()
+    setPasswordNotice('')
+    setPasswordError('')
+    setChangingPassword(true)
+    try {
+      await api.post('/auth/change-password', passwordForm)
+      setPasswordForm({ current_password: '', new_password: '' })
+      setPasswordNotice('Password changed successfully.')
+    } catch (error) {
+      setPasswordError(error.message || 'Unable to change your password.')
+    } finally {
+      setChangingPassword(false)
+    }
+  }
+
   const handleLogout = () => {
     logout()
     navigate('/', { replace: true })
@@ -104,6 +124,26 @@ const OfficialWorkspace = () => {
               <div className="official-tool"><span aria-hidden="true">◷</span><strong>Audit logs</strong><small>Audit access is assigned to your account; log screens are not yet connected.</small></div>
             )}
           </div>
+        </section>
+
+        <section className="official-section" aria-labelledby="password-title">
+          <h2 id="password-title">Change your password</h2>
+          <p className="official-muted">Use your current password to set a new password of at least 8 characters.</p>
+          <form className="official-password-form" onSubmit={handlePasswordChange}>
+            <label className="field"><span className="field__label">Current password</span>
+              <input className="field__input" type="password" autoComplete="current-password"
+                value={passwordForm.current_password}
+                onChange={(e) => setPasswordForm({ ...passwordForm, current_password: e.target.value })} required /></label>
+            <label className="field"><span className="field__label">New password</span>
+              <input className="field__input" type="password" minLength="8" maxLength="128" autoComplete="new-password"
+                value={passwordForm.new_password}
+                onChange={(e) => setPasswordForm({ ...passwordForm, new_password: e.target.value })} required /></label>
+            <div className="official-form-actions"><button className="btn btn--primary" type="submit" disabled={changingPassword}>
+              {changingPassword ? 'Updating…' : 'Update password'}
+            </button></div>
+          </form>
+          {passwordNotice && <p className="official-success" role="status">{passwordNotice}</p>}
+          {passwordError && <p className="official-alert" role="alert">{passwordError}</p>}
         </section>
 
         {canManageUsers && (
