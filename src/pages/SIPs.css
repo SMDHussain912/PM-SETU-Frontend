@@ -1,4 +1,5 @@
-.sips-page { --sips-accent: var(--c-sky); }\n
+.sips-page { --sips-accent: var(--c-sky); }
+
 /* SIP page hero and section heading styles (kept local to this page). */
 .sips-intro {
   display: flex;
