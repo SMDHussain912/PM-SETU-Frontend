@@ -1,129 +1,80 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import PageHeader from '../components/common/PageHeader'
 import { useAuth } from '../context/AuthProvider'
+import { api } from '../lib/api'
 import './RoleWorkspace.css'
 
-const WORKSPACES = {
-  super_admin: {
-    title: 'System administration',
-    description: 'Platform-wide administration, access governance and operational oversight.',
-    modules: [
-      ['Administration centre', 'Manage official accounts, role grants, content, approvals and audit records.', '/admin', 'Manage'],
-      ['Programme dashboard', 'Review state-wide implementation indicators.', '/dashboard', 'View'],
-      ['Governance directory', 'Review programme governance and responsible officers.', '/governance', 'View'],
-    ],
-  },
-  state_pmu_admin: {
-    title: 'State PMU workspace',
-    description: 'Coordinate programme operations, official accounts and state-level reporting.',
-    modules: [
-      ['Administration centre', 'Manage permitted official accounts, content and contact enquiries.', '/admin', 'Open'],
-      ['State dashboard', 'Monitor programme indicators and implementation progress.', '/dashboard', 'View'],
-      ['Governance directory', 'Review governance structures and officers.', '/governance', 'View'],
-      ['Programme documents', 'Review published government orders and programme documents.', '/documents', 'View'],
-    ],
-  },
-  det_content_admin: {
-    title: 'Content administration',
-    description: 'Maintain programme information and content through the authorised publishing workflow.',
-    modules: [
-      ['Content & communications', 'Create and maintain documents, news, gallery media and banners.', '/admin', 'Manage'],
-      ['Published documents', 'Review programme documents visible to the public.', '/documents', 'View'],
-      ['News & announcements', 'Review published programme updates.', '/news', 'View'],
-      ['Media gallery', 'Review published gallery items.', '/gallery', 'View'],
-    ],
-  },
-  approving_authority: {
-    title: 'Approving authority workspace',
-    description: 'Review assigned approval work and inspect the authorised audit trail.',
-    modules: [
-      ['Approval & audit centre', 'Review approval records, perform permitted transitions and inspect audit history.', '/admin', 'Open'],
-      ['Programme dashboard', 'Review programme-level implementation indicators.', '/dashboard', 'View'],
-      ['Governance directory', 'Reference programme governance and responsible officers.', '/governance', 'View'],
-    ],
-  },
-  cluster_admin: {
-    title: 'Cluster administration',
-    description: 'Cluster-level reference and reporting workspace. Cluster-scoped editing and assignment workflows require additional backend endpoints.',
-    modules: [
-      ['Cluster directory', 'Find your cluster and review its public profile.', '/clusters', 'View'],
-      ['Implementation dashboard', 'Review available programme and cluster indicators.', '/dashboard', 'View'],
-      ['ITI directory', 'Find ITIs and review their published information.', '/clusters', 'View'],
-      ['Programme documents', 'Reference published programme orders and documents.', '/documents', 'View'],
-    ],
-  },
-  hub_iti_user: {
-    title: 'Hub ITI workspace',
-    description: 'ITI reference and programme reporting workspace. Protected ITI submissions and record editing are not yet exposed by the current backend.',
-    modules: [
-      ['Cluster & ITI directory', 'Reference cluster and institute information.', '/clusters', 'View'],
-      ['Programme dashboard', 'Review available implementation indicators.', '/dashboard', 'View'],
-      ['Programme documents', 'Access published instructions and government orders.', '/documents', 'View'],
-    ],
-  },
-  spoke_iti_user: {
-    title: 'Spoke ITI workspace',
-    description: 'ITI reference and programme reporting workspace. Protected ITI submissions and record editing are not yet exposed by the current backend.',
-    modules: [
-      ['Cluster & ITI directory', 'Reference cluster and institute information.', '/clusters', 'View'],
-      ['Programme dashboard', 'Review available implementation indicators.', '/dashboard', 'View'],
-      ['Programme documents', 'Access published instructions and government orders.', '/documents', 'View'],
-    ],
-  },
-  aip_user: {
-    title: 'Industry partner workspace',
-    description: 'Industry partner directory and programme reference information.',
-    modules: [
-      ['Industry partners', 'Browse AIP profiles and published partner information.', '/industry-partners', 'View'],
-      ['Programme dashboard', 'Review public implementation indicators.', '/dashboard', 'View'],
-      ['Programme documents', 'Reference published programme documents.', '/documents', 'View'],
-    ],
-  },
-  spv_user: {
-    title: 'SPV workspace',
-    description: 'SPV and SIP programme reference information.',
-    modules: [
-      ['SPV directory', 'Browse SPV profiles and published information.', '/spvs', 'View'],
-      ['SIP directory', 'Review published SIP records.', '/sips', 'View'],
-      ['Programme dashboard', 'Review public programme indicators.', '/dashboard', 'View'],
-    ],
-  },
-  dashboard_viewer: {
-    title: 'Programme reporting workspace',
-    description: 'Read-only access to programme dashboards and public reference information.',
-    modules: [
-      ['Implementation dashboard', 'Review programme indicators and available reports.', '/dashboard', 'View'],
-      ['Cluster directory', 'Browse cluster information.', '/clusters', 'View'],
-      ['Programme documents', 'Reference published programme documents.', '/documents', 'View'],
-    ],
-  },
+const ROLE_INFO = {
+  super_admin: ['System administration', 'Platform-wide access governance and oversight.'],
+  state_pmu_admin: ['State PMU workspace', 'Coordinate state operations, authorised accounts and programme reporting.'],
+  det_content_admin: ['Content administration', 'Maintain programme content through the publishing workflow.'],
+  approving_authority: ['Approving authority workspace', 'Review assigned approval work and decision history.'],
+  cluster_admin: ['Cluster administration', 'Manage only the clusters assigned to your account.'],
+  hub_iti_user: ['Hub ITI workspace', 'Access the Hub ITI records assigned to your account.'],
+  spoke_iti_user: ['Spoke ITI workspace', 'Access the Spoke ITI records assigned to your account.'],
+  aip_user: ['Industry partner workspace', 'Access the AIP records assigned to your account.'],
+  spv_user: ['SPV workspace', 'Access the SPV records assigned to your account.'],
+  dashboard_viewer: ['Programme reporting workspace', 'Read-only programme indicators and public reference information.'],
+}
+const SCOPE_LINKS = { CLUSTER: '/clusters', ITI: '/clusters', AIP: '/industry-partners', SPV: '/spvs' }
+const ROLE_LINKS = {
+  super_admin: [['Administration centre', '/admin']],
+  state_pmu_admin: [['State administration', '/admin'], ['Programme dashboard', '/dashboard']],
+  det_content_admin: [['Content administration', '/admin'], ['Documents', '/documents'], ['News', '/news'], ['Gallery', '/gallery']],
+  approving_authority: [['Approval & audit centre', '/admin'], ['Programme dashboard', '/dashboard']],
+  cluster_admin: [['Cluster directory', '/clusters'], ['Programme dashboard', '/dashboard']],
+  hub_iti_user: [['ITI directory', '/clusters'], ['Programme dashboard', '/dashboard']],
+  spoke_iti_user: [['ITI directory', '/clusters'], ['Programme dashboard', '/dashboard']],
+  aip_user: [['Industry partners', '/industry-partners'], ['Programme dashboard', '/dashboard']],
+  spv_user: [['SPV directory', '/spvs'], ['SIP directory', '/sips'], ['Programme dashboard', '/dashboard']],
+  dashboard_viewer: [['Programme dashboard', '/dashboard'], ['Documents', '/documents']],
 }
 
-const RoleWorkspace = () => {
+export default function RoleWorkspace() {
   const { user } = useAuth()
-  const roles = user?.roles || []
-  const active = roles.map((role) => WORKSPACES[role.code]).filter(Boolean)
-  const modules = [...new Map(active.flatMap((workspace) => workspace.modules).map((item) => [item[0], item])).values()]
-  const title = active.length === 1 ? active[0].title : 'My PM SETU workspace'
-  const description = active.length === 1 ? active[0].description : 'Your workspace combines the tools available to your assigned roles.'
+  const [scopes, setScopes] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const roles = (user?.roles || []).map((role) => role.code)
+  const primary = roles.find((role) => ROLE_INFO[role])
+  const [title, description] = ROLE_INFO[primary] || ['Official workspace', 'Your authorised PM SETU tools.']
+
+  useEffect(() => {
+    let active = true
+    api.get('/auth/me/scopes')
+      .then((response) => { if (active) setScopes(response.data || []) })
+      .catch((e) => { if (active) setError(e.message || 'Unable to load assigned organisation access.') })
+      .finally(() => { if (active) setLoading(false) })
+    return () => { active = false }
+  }, [])
+
+  const links = [...new Map(roles.flatMap((role) => ROLE_LINKS[role] || []).map((item) => [item[0], item])).values()]
+  const scopedRoles = roles.some((role) => ['cluster_admin', 'hub_iti_user', 'spoke_iti_user', 'aip_user', 'spv_user'].includes(role))
+
   return <>
     <PageHeader title={title} lead={description} breadcrumb={[{ label: 'My workspace' }]} />
     <div className="container page-section role-workspace">
       <section className="role-workspace__identity">
         <div><span className="role-workspace__eyebrow">SIGNED IN AS</span><h2>{user?.full_name || user?.username}</h2><p>{user?.username}</p></div>
-        <div className="role-workspace__roles">{roles.map((role) => <span key={role.code}>{role.name}</span>)}</div>
+        <div className="role-workspace__roles">{(user?.roles || []).map((role) => <span key={role.code}>{role.name}</span>)}</div>
       </section>
-      <section className="role-workspace__section">
-        <div className="role-workspace__heading"><div><h2>Your workspaces</h2><p>Tools are shown according to the roles currently assigned to your account.</p></div></div>
-        <div className="role-workspace__grid">
-          {modules.map(([name, detail, href, action]) => <article className="role-workspace__card" key={name}>
-            <div><h3>{name}</h3><p>{detail}</p></div>
-            <Link to={href}>{action} <span aria-hidden="true">→</span></Link>
+      {scopedRoles && <section className="role-workspace__section">
+        <div className="role-workspace__heading"><div><h2>Your assigned organisations</h2><p>These assignments define the organisation-level scope available to your account.</p></div></div>
+        {loading ? <p>Loading assignments…</p> : error ? <p className="role-workspace__error" role="alert">{error}</p> : scopes.length ? <div className="role-workspace__grid">
+          {scopes.map((scope) => <article className="role-workspace__card" key={scope.id}>
+            <div><span className="role-workspace__type">{scope.scope_type}</span><h3>{scope.scope_name}</h3><p>Assigned organisation record · ID {scope.scope_id}</p></div>
+            <Link to={SCOPE_LINKS[scope.scope_type] || '/dashboard'}>Open directory <span aria-hidden="true">→</span></Link>
           </article>)}
+        </div> : <p className="role-workspace__error">No organisation scopes are assigned yet. Please contact your State PMU administrator.</p>}
+      </section>}
+      <section className="role-workspace__section">
+        <div className="role-workspace__heading"><div><h2>Available modules</h2><p>Shortcuts based on your assigned roles.</p></div></div>
+        <div className="role-workspace__grid">
+          {links.map(([name, href]) => <article className="role-workspace__card" key={name}><div><h3>{name}</h3><p>Open the currently available PM SETU module.</p></div><Link to={href}>Open module <span aria-hidden="true">→</span></Link></article>)}
         </div>
       </section>
-      <p className="role-workspace__notice"><strong>Access boundary:</strong> A workspace link does not grant additional permissions. The backend checks every protected operation. Some institute- and cluster-scoped submission/editing workflows are not yet implemented in the current API and are intentionally not presented as active controls.</p>
+      <p className="role-workspace__notice"><strong>Access control:</strong> These assignments are informational until each write workflow is connected to server-side scope checks. Public directories remain read-only; changing a URL or record ID must never grant additional access.</p>
     </div>
   </>
 }
-export default RoleWorkspace
