@@ -4,6 +4,7 @@ import Layout from '../components/layout/Layout'
 import ProtectedRoute from '../components/auth/ProtectedRoute'
 import Login from '../pages/Login'
 import OfficialWorkspace from '../pages/OfficialWorkspace'
+import AdminDashboard from '../pages/AdminDashboard'
 
 import Home from '../pages/Home'
 import AboutSetu from '../pages/AboutSetu'
@@ -61,6 +62,9 @@ const AppRoutes = () => (
 
       <Route element={<ProtectedRoute />}>
         <Route path="official" element={<OfficialWorkspace />} />
+        <Route element={<ProtectedRoute roles={['super_admin', 'state_pmu_admin']} />}>
+          <Route path="admin" element={<AdminDashboard />} />
+        </Route>
       </Route>
 
       <Route path="*" element={<NotFound />} />
