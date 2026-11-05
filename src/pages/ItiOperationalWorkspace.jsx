@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import PageHeader from '../components/common/PageHeader'
 import { useAuth } from '../context/AuthProvider'
@@ -29,7 +29,7 @@ export default function ItiOperationalWorkspace() {
   const [notice, setNotice] = useState('')
   const [tab, setTab] = useState('profile')
 
-  const load = async () => {
+  const load = useCallback(async () => {
     setLoading(true); setError('')
     try {
       const [iti, submissions] = await Promise.all([
@@ -48,9 +48,9 @@ export default function ItiOperationalWorkspace() {
       setReports(submissions.data || [])
     } catch (e) { setError(e.message || 'Unable to load institute workspace.') }
     finally { setLoading(false) }
-  }
+  }, [itiId])
 
-  useEffect(() => { load() }, [itiId])
+  useEffect(() => { void Promise.resolve().then(load) }, [load])
 
   const saveProfile = async (event) => {
     event.preventDefault(); setSaving(true); setError(''); setNotice('')
