@@ -16,10 +16,12 @@ export default function UserScopeManager({ user, onClose, onSaved }) {
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const roleKey = (user.roles || []).map((role) => role.code).join('|')
-  const roleCodes = roleKey.split('|')
-  const sources = useMemo(() => SCOPE_SOURCES.filter((source) =>
-    source.roles ? source.roles.some((role) => roleCodes.includes(role)) : roleCodes.includes(source.role)
-  ), [roleKey])
+  const sources = useMemo(() => {
+    const roleCodes = roleKey.split('|')
+    return SCOPE_SOURCES.filter((source) =>
+      source.roles ? source.roles.some((role) => roleCodes.includes(role)) : roleCodes.includes(source.role)
+    )
+  }, [roleKey])
 
   const load = useCallback(async () => {
     setLoading(true); setError('')
@@ -36,7 +38,7 @@ export default function UserScopeManager({ user, onClose, onSaved }) {
     finally { setLoading(false) }
   }, [user.id, sources])
 
-  useEffect(() => { load() }, [load])
+  useEffect(() => { void Promise.resolve().then(load) }, [load])
 
   const toggle = (scopeType, scopeId, checked) => {
     setSelected((current) => checked
