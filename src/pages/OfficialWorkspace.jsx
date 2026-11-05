@@ -43,7 +43,7 @@ const OfficialWorkspace = () => {
     }
   }, [canManageUsers])
 
-  useEffect(() => { loadUsers() }, [loadUsers])
+  useEffect(() => { void Promise.resolve().then(loadUsers) }, [loadUsers])
 
   const handleCreate = async (event) => {
     event.preventDefault()
