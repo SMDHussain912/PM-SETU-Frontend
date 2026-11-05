@@ -95,7 +95,9 @@ const AdminDashboard = () => {
     finally { setLoading(false) }
   }, [canManageUsers, canManageRoles, canReadApprovals, canReadAudit, loadUsers, loadRoles, loadApprovals, loadAudit])
 
-  useEffect(() => { refresh() }, [refresh])
+  useEffect(() => {
+    void Promise.resolve().then(refresh)
+  }, [refresh])
 
   const stats = useMemo(() => [
     ['Official accounts', users.length],
