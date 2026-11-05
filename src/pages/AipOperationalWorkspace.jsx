@@ -1,4 +1,4 @@
-import {useEffect,useState} from 'react'
+import {useCallback,useEffect,useState} from 'react'
 import {Link,useParams} from 'react-router-dom'
 import PageHeader from '../components/common/PageHeader'
 import {api} from '../lib/api'
@@ -13,8 +13,8 @@ export default function AipOperationalWorkspace(){
  const [activity,setActivity]=useState(EMPTY),[report,setReport]=useState(REPORT),[tab,setTab]=useState('activities')
  const [loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('')
  const roles=(user?.roles||[]).map(r=>r.code),canReview=roles.some(r=>['cluster_admin','state_pmu_admin','super_admin'].includes(r))
- const load=async()=>{setLoading(true);setError('');try{const [a,x,r]=await Promise.all([api.get('/aips/'+aipId),api.get('/aips/'+aipId+'/activities'),api.get('/aips/'+aipId+'/submissions')]);setAip(a.data);setActivities(x.data||[]);setReports(r.data||[])}catch(e){setError(e.message||'Unable to load AIP workspace.')}finally{setLoading(false)}}
- useEffect(()=>{load()},[aipId])
+ const load=useCallback(async()=>{setLoading(true);setError('');try{const [a,x,r]=await Promise.all([api.get('/aips/'+aipId),api.get('/aips/'+aipId+'/activities'),api.get('/aips/'+aipId+'/submissions')]);setAip(a.data);setActivities(x.data||[]);setReports(r.data||[])}catch(e){setError(e.message||'Unable to load AIP workspace.')}finally{setLoading(false)}},[aipId])
+ useEffect(()=>{void Promise.resolve().then(load)},[load])
  const addActivity=async e=>{e.preventDefault();setSaving(true);setError('');setNotice('');try{const body={...activity,quantity:activity.quantity===''?undefined:Number(activity.quantity),activity_date:activity.activity_date||undefined,evidence_url:activity.evidence_url||undefined,description:activity.description||undefined};await api.post('/aips/'+aipId+'/activities',body);setActivity(EMPTY);setNotice('Activity record saved.');await load()}catch(e){setError(e.message||'Unable to save activity.')}finally{setSaving(false)}}
  const createReport=async e=>{e.preventDefault();setSaving(true);setError('');setNotice('');try{await api.post('/aips/'+aipId+'/submissions',{title:report.title,report_period:report.report_period,payload:JSON.parse(report.payloadText)});setReport(REPORT);setNotice('Progress report draft created.');await load();setTab('reports')}catch(e){setError(e instanceof SyntaxError?'Report details must be valid JSON.':e.message||'Unable to create report.')}finally{setSaving(false)}}
  const submit=async id=>{setSaving(true);try{await api.post('/aips/'+aipId+'/submissions/'+id+'/submit',{});setNotice('AIP report submitted for review.');await load()}catch(e){setError(e.message||'Unable to submit report.')}finally{setSaving(false)}}
