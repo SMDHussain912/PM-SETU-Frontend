@@ -41,10 +41,8 @@ function AdminContentWorkspace({ canManageContact = false }) {
   }, [module])
 
   useEffect(() => {
-    setEditing(null)
-    setForm(emptyForms[module] || {})
-    load()
-  }, [module, load])
+    void Promise.resolve().then(load)
+  }, [load])
 
   const perform = async (callback, message) => {
     setError(''); setNotice('')
@@ -112,7 +110,7 @@ function AdminContentWorkspace({ canManageContact = false }) {
   const canPublish = ['documents','news','banners'].includes(module)
   return <section className="admin-section">
     <div className="admin-section-heading"><div><h2>Content & communications</h2><p>Manage programme documents, news, gallery media, banners and incoming public enquiries.</p></div><button className="btn btn--ghost" type="button" onClick={load} disabled={loading}>Refresh</button></div>
-    <nav className="admin-content-tabs" aria-label="Content management sections">{MODULES.filter(([id]) => id !== 'contact' || canManageContact).map(([id,label]) => <button type="button" key={id} className={module === id ? 'is-active' : ''} onClick={() => setModule(id)}>{label}</button>)}</nav>
+    <nav className="admin-content-tabs" aria-label="Content management sections">{MODULES.filter(([id]) => id !== 'contact' || canManageContact).map(([id,label]) => <button type="button" key={id} className={module === id ? 'is-active' : ''} onClick={() => { setModule(id); setEditing(null); setForm(emptyForms[id] || {}) }}>{label}</button>)}</nav>
     {error && <p className="admin-error" role="alert">{error}</p>}
     {notice && <p className="admin-notice" role="status">{notice}</p>}
     {module === 'contact' ? <div className="admin-table-wrap"><table className="admin-table"><thead><tr><th>Received</th><th>Name</th><th>Contact</th><th>Subject / message</th><th>Status</th><th>Update status</th></tr></thead><tbody>
