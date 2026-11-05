@@ -1,4 +1,4 @@
-import {useEffect,useState} from 'react'
+import {useCallback,useEffect,useState} from 'react'
 import {Link,useParams} from 'react-router-dom'
 import PageHeader from '../components/common/PageHeader'
 import {api} from '../lib/api'
@@ -13,8 +13,8 @@ export default function SpvOperationalWorkspace(){
  const [activity,setActivity]=useState(EMPTY),[report,setReport]=useState(REPORT),[tab,setTab]=useState('activities')
  const [loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('')
  const roles=(user?.roles||[]).map(r=>r.code),canReview=roles.some(r=>['cluster_admin','state_pmu_admin','super_admin'].includes(r))
- const load=async()=>{setLoading(true);setError('');try{const [s,a,r]=await Promise.all([api.get('/spvs/'+spvId),api.get('/spvs/'+spvId+'/activities'),api.get('/spvs/'+spvId+'/submissions')]);setSpv(s.data);setActivities(a.data||[]);setReports(r.data||[])}catch(e){setError(e.message||'Unable to load SPV workspace.')}finally{setLoading(false)}}
- useEffect(()=>{load()},[spvId])
+ const load=useCallback(async()=>{setLoading(true);setError('');try{const [s,a,r]=await Promise.all([api.get('/spvs/'+spvId),api.get('/spvs/'+spvId+'/activities'),api.get('/spvs/'+spvId+'/submissions')]);setSpv(s.data);setActivities(a.data||[]);setReports(r.data||[])}catch(e){setError(e.message||'Unable to load SPV workspace.')}finally{setLoading(false)}},[spvId])
+ useEffect(()=>{void Promise.resolve().then(load)},[load])
  const addActivity=async e=>{e.preventDefault();setSaving(true);setError('');setNotice('');try{await api.post('/spvs/'+spvId+'/activities',{...activity,quantity:activity.quantity===''?undefined:Number(activity.quantity),activity_date:activity.activity_date||undefined,evidence_url:activity.evidence_url||undefined,description:activity.description||undefined});setActivity(EMPTY);setNotice('SPV activity saved.');await load()}catch(e){setError(e.message||'Unable to save activity.')}finally{setSaving(false)}}
  const createReport=async e=>{e.preventDefault();setSaving(true);setError('');setNotice('');try{await api.post('/spvs/'+spvId+'/submissions',{title:report.title,report_period:report.report_period,payload:JSON.parse(report.payloadText)});setReport(REPORT);setNotice('Progress report draft created.');await load();setTab('reports')}catch(e){setError(e instanceof SyntaxError?'Report details must be valid JSON.':e.message||'Unable to create report.')}finally{setSaving(false)}}
  const submit=async id=>{setSaving(true);try{await api.post('/spvs/'+spvId+'/submissions/'+id+'/submit',{});setNotice('SPV report submitted for review.');await load()}catch(e){setError(e.message||'Unable to submit report.')}finally{setSaving(false)}}
