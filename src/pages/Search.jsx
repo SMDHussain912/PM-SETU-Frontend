@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useApi } from '../hooks/useApi'
 import { useListQuery } from '../hooks/useListQuery'
 import { search } from '../lib/endpoints'
@@ -51,8 +51,10 @@ const CategoryIcon = ({ name }) => {
 }
 
 const Search = () => {
+  const [searchParams] = useSearchParams()
+  const initialQuery = searchParams.get('q') ?? ''
   const { page, pageSize, filters, setFilters, setPage, reset } = useListQuery({
-    q: '',
+    q: initialQuery,
     type: '',
     district: '',
     year: '',
@@ -78,7 +80,7 @@ const Search = () => {
   )
 
   const results = data?.results ?? []
-  const [term, setTerm] = useState(filters.q)
+  const [term, setTerm] = useState(initialQuery)
 
   const submit = (e) => {
     e.preventDefault()
