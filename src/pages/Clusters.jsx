@@ -40,6 +40,9 @@ const Clusters = () => {
 
       <div className="container page-section">
         <PortalSearchBox />
+        <div className="page-note" role="note">
+          <strong>Strategic Investment Plans (SIP)</strong> — Explore proposed cluster investments, industry and government contributions, and approval progress. <Link to="/sips">Browse SIP tracking</Link> or open a cluster and select its SIP tab.
+        </div>
         <form
           className="filter-bar"
           role="search"
