@@ -6,6 +6,7 @@ import { formatStatus, formatCurrencyINR, formatDate } from '../lib/format'
 import PageHeader from '../components/common/PageHeader'
 import DataBoundary from '../components/common/DataBoundary'
 import Pagination from '../components/common/Pagination'
+import PortalSearchBox from '../components/common/PortalSearchBox'
 import './SIPs.css'
 
 /**
@@ -53,6 +54,7 @@ const SIPs = () => {
       />
 
       <div className="container page-section sips-page">
+        <PortalSearchBox />
         <section className="sips-intro" aria-labelledby="sips-intro-title">
           <div className="sips-intro__copy">
             <span className="sips-eyebrow">PLANNING · CONTRIBUTION · IMPLEMENTATION</span>
