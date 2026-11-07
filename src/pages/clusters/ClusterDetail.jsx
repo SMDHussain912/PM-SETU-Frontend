@@ -2,8 +2,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useState } from 'react'
 import { useApi } from '../../hooks/useApi'
 import { getCluster, getClusterItis, getClusterSip } from '../../lib/endpoints'
-import { formatStatus, formatCurrencyINR, formatDate } from '../../lib/format'
-import { orPending } from '../../lib/format'
+import { orPending, formatStatus, formatCurrencyINR, formatDate } from '../../lib/format'
 import PageHeader from '../../components/common/PageHeader'
 import RecordDetail from '../../components/common/RecordDetail'
 import DataBoundary from '../../components/common/DataBoundary'
@@ -15,11 +14,8 @@ import PortalSearchBox from '../../components/common/PortalSearchBox'
  * §9 specifies the tab strip: Overview | ITIs | AIP | SPV | SIP |
  * Infrastructure | Courses | Progress | Documents | Gallery.
  *
- * The API currently serves only /:id and /:id/itis; the backend defers
- * /:id/summary, /:id/aip, /:id/spv, /:id/sip and /map because their grouping
- * mechanism is unspecified. The full strip is therefore rendered with the tabs
- * that have no data source marked as pending, rather than silently dropped —
- * a visitor can see what the specification requires and what is not yet live.
+ * The API serves cluster detail, ITIs and the cluster-scoped SIP registry.
+ * Other sections remain visibly pending until their data contracts are connected.
  */
 const TABS = [
   { id: 'overview', label: 'Overview', available: true },
