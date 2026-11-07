@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { usePrefs, FONT_SCALE_LABELS, LANGUAGES } from '../../context/prefs-context'
 import { useI18n } from '../../hooks/useI18n'
 import '../../styles/UtilityBar.css'
@@ -28,6 +29,8 @@ const UtilityBar = () => {
       </div>
 
       <div className="utility-bar__right">
+        <Link to="/search" className="utility-bar__btn">Search</Link>
+        <span className="utility-bar__sep" aria-hidden="true">|</span>
         <a href="#main-content" className="skip-link">
           {t('util.skip')}
         </a>
