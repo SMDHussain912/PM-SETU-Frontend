@@ -28,7 +28,6 @@ const CATEGORIES = [
   { title: 'AP Clusters', description: 'Explore cluster locations, sectors and linked institutes.', to: '/clusters', icon: 'cluster' },
   { title: 'Industry Partners', description: 'Find Anchor Industry Partners and their sectors.', to: '/industry-partners', icon: 'industry' },
   { title: 'SPVs', description: 'Browse Special Purpose Vehicle records and status.', to: '/spvs', icon: 'partners' },
-  { title: 'Investment Plans', description: 'Explore Strategic Investment Plans and approvals.', to: '/sips', icon: 'investment' },
   { title: 'GOs & Documents', description: 'Find government orders, guidelines and circulars.', to: '/documents', icon: 'document' },
   { title: 'News & Events', description: 'Read programme updates and published announcements.', to: '/news', icon: 'news' },
 ]
