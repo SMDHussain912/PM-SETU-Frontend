@@ -6,6 +6,7 @@ import { orPending } from '../lib/format'
 import PageHeader from '../components/common/PageHeader'
 import DataBoundary from '../components/common/DataBoundary'
 import Pagination from '../components/common/Pagination'
+import PortalSearchBox from '../components/common/PortalSearchBox'
 
 /**
  * AP Clusters — plan §9, "one of the core modules of the portal".
@@ -38,6 +39,7 @@ const Clusters = () => {
       />
 
       <div className="container page-section">
+        <PortalSearchBox />
         <form
           className="filter-bar"
           role="search"
