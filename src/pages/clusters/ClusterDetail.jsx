@@ -5,6 +5,7 @@ import { orPending } from '../../lib/format'
 import PageHeader from '../../components/common/PageHeader'
 import RecordDetail from '../../components/common/RecordDetail'
 import DataBoundary from '../../components/common/DataBoundary'
+import PortalSearchBox from '../../components/common/PortalSearchBox'
 
 /**
  * Cluster detail — plan §9.
@@ -50,6 +51,7 @@ const ClusterDetail = () => {
       />
 
       <div className="container page-section">
+        <PortalSearchBox />
         <RecordDetail
           loading={cluster.loading}
           error={cluster.error}
