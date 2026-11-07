@@ -1,6 +1,8 @@
 import { Link, useParams } from 'react-router-dom'
+import { useState } from 'react'
 import { useApi } from '../../hooks/useApi'
-import { getCluster, getClusterItis } from '../../lib/endpoints'
+import { getCluster, getClusterItis, getClusterSip } from '../../lib/endpoints'
+import { formatStatus, formatCurrencyINR, formatDate } from '../../lib/format'
 import { orPending } from '../../lib/format'
 import PageHeader from '../../components/common/PageHeader'
 import RecordDetail from '../../components/common/RecordDetail'
@@ -24,7 +26,7 @@ const TABS = [
   { id: 'itis', label: 'ITIs', available: true },
   { id: 'aip', label: 'AIP', available: false },
   { id: 'spv', label: 'SPV', available: false },
-  { id: 'sip', label: 'SIP', available: false },
+  { id: 'sip', label: 'SIP', available: true },
   { id: 'infrastructure', label: 'Infrastructure', available: false },
   { id: 'courses', label: 'Courses', available: false },
   { id: 'progress', label: 'Progress', available: false },
@@ -33,9 +35,11 @@ const TABS = [
 ]
 const ClusterDetail = () => {
   const { clusterId } = useParams()
+  const [activeTab, setActiveTab] = useState('overview')
 
   const cluster = useApi((signal) => getCluster(clusterId, { signal }), [clusterId])
   const itis = useApi((signal) => getClusterItis(clusterId, { signal }), [clusterId])
+  const sips = useApi((signal) => getClusterSip(clusterId, { signal }), [clusterId])
 
   const list = Array.isArray(itis.data) ? itis.data : []
 
@@ -76,9 +80,10 @@ const ClusterDetail = () => {
               key={tab.id}
               type="button"
               role="tab"
-              className={tab.available ? 'tab is-active' : 'tab tab--pending'}
-              aria-selected={tab.available}
+              className={activeTab === tab.id ? 'tab is-active' : tab.available ? 'tab' : 'tab tab--pending'}
+              aria-selected={activeTab === tab.id}
               disabled={!tab.available}
+              onClick={() => tab.available && setActiveTab(tab.id)}
               title={tab.available ? undefined : 'Pending — this section is not yet connected to a data source'}
             >
               {tab.label}
@@ -86,6 +91,7 @@ const ClusterDetail = () => {
           ))}
         </div>
 
+        {activeTab === 'overview' || activeTab === 'itis' ? <>
         <h2 className="page-subtitle">Hub &amp; Spoke ITIs</h2>
         <DataBoundary
           loading={itis.loading}
@@ -107,6 +113,23 @@ const ClusterDetail = () => {
             ))}
           </ul>
         </DataBoundary>
+        </> : null}
+
+        {activeTab === 'sip' ? <section aria-labelledby="cluster-sips-title">
+          <h2 id="cluster-sips-title" className="page-subtitle">Strategic Investment Plans</h2>
+          <DataBoundary loading={sips.loading} error={sips.error} onRetry={sips.refetch} isEmpty={!Array.isArray(sips.data) || sips.data.length === 0} emptyTitle="No SIP records for this cluster" emptyMessage="SIP records will appear here when they are registered for this cluster." skeletonRows={2}>
+            <div className="card-grid">
+              {(Array.isArray(sips.data) ? sips.data : []).map((sip) => <article className="record-card" key={sip.id}>
+                <span className="badge">{formatStatus(sip.status)}</span>
+                <h3 className="record-card__title"><Link to={`/sips/${sip.id}`}>Strategic Investment Plan #{sip.id}</Link></h3>
+                <p className="record-card__meta">{sip.aip?.name || 'Industry partner not linked'}</p>
+                {sip.proposed_investment != null && <p><strong>Proposed investment:</strong> {formatCurrencyINR(Number(sip.proposed_investment))}</p>}
+                {sip.submission_date && <p><strong>Submitted:</strong> {formatDate(sip.submission_date)}</p>}
+                <Link className="record-card__link" to={`/sips/${sip.id}`}>View SIP details</Link>
+              </article>)}
+            </div>
+          </DataBoundary>
+        </section> : null}
 
         <p className="page-note">
           <Link to="/clusters">Back to all clusters</Link>
