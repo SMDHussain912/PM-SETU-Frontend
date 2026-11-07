@@ -252,3 +252,33 @@ img, svg { max-width: 100%; display: block; }
     transition-duration: 0.01ms !important;
   }
 }
+
+
+/* Shared cross-module search used on all public registry pages. */
+.portal-search {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+  margin: 0 0 24px;
+  padding: 16px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background: var(--c-surface);
+}
+.portal-search__label { display: grid; gap: 6px; flex: 1; min-width: 0; font-weight: 600; color: var(--c-ink-2); }
+.portal-search__label input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--c-border);
+  border-radius: 8px;
+  background: var(--c-bg);
+  color: var(--c-ink);
+  font: inherit;
+}
+.portal-search__label input:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; }
+.portal-search button { min-height: 44px; }
+.portal-search button:disabled { opacity: .55; cursor: not-allowed; }
+@media (max-width: 640px) {
+  .portal-search { align-items: stretch; flex-direction: column; }
+}
