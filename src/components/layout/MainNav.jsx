@@ -16,7 +16,7 @@ const MainNav = () => {
           <li key={item.to} className="main-nav__item">
             <NavLink to={item.to} end={item.end}
               className={({ isActive }) => isActive ? 'main-nav__link is-active' : 'main-nav__link'}>
-              {t(item.i18nKey)}
+              {item.i18nKey ? t(item.i18nKey) : item.label}
             </NavLink>
           </li>
         ))}
