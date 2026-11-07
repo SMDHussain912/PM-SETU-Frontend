@@ -31,6 +31,8 @@ const UtilityBar = () => {
       <div className="utility-bar__right">
         <Link to="/search" className="utility-bar__btn">Search</Link>
         <span className="utility-bar__sep" aria-hidden="true">|</span>
+        <Link to="/sips" className="utility-bar__btn">SIP Tracking</Link>
+        <span className="utility-bar__sep" aria-hidden="true">|</span>
         <a href="#main-content" className="skip-link">
           {t('util.skip')}
         </a>
