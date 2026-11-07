@@ -6,6 +6,7 @@ import { orPending, formatDate } from '../lib/format'
 import PageHeader from '../components/common/PageHeader'
 import DataBoundary from '../components/common/DataBoundary'
 import Pagination from '../components/common/Pagination'
+import PortalSearchBox from '../components/common/PortalSearchBox'
 import './News.css'
 
 /**
@@ -36,6 +37,7 @@ const News = () => {
       />
 
       <div className="container page-section">
+        <PortalSearchBox />
         <p className="page-toolbar">
           <Link className="btn btn--secondary" to="/gallery">
             Browse the media gallery
