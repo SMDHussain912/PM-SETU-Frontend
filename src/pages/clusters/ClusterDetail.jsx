@@ -87,7 +87,7 @@ const ClusterDetail = () => {
           ))}
         </div>
 
-        {activeTab === 'overview' || activeTab === 'itis' ? <>
+        {activeTab === 'itis' ? <>
         <h2 className="page-subtitle">Hub &amp; Spoke ITIs</h2>
         <DataBoundary
           loading={itis.loading}
