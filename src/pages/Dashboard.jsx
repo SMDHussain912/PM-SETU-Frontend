@@ -59,6 +59,11 @@ const Dashboard = () => {
 
       <div className="container page-section">
         <DataAsOf />
+        {import.meta.env.DEV && (
+          <p className="dash-disclaimer dash-disclaimer--demo" role="status">
+            DEMO MODE — fictional development records are included in these registry totals. They are not official PM SETU figures.
+          </p>
+        )}
 
         <p className="dash-disclaimer">
           Values are read from the PM SETU database. A dash means the source
