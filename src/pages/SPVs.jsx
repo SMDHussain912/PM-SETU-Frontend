@@ -6,6 +6,7 @@ import { orPending, formatStatus } from '../lib/format'
 import PageHeader from '../components/common/PageHeader'
 import DataBoundary from '../components/common/DataBoundary'
 import Pagination from '../components/common/Pagination'
+import PortalSearchBox from '../components/common/PortalSearchBox'
 
 /**
  * SPVs — plan §12. Lifecycle: Proposed -> Under Formation -> Incorporated ->
@@ -31,6 +32,7 @@ const SPVs = () => {
       />
 
       <div className="container page-section">
+        <PortalSearchBox />
         <DataBoundary
           loading={loading}
           error={error}
